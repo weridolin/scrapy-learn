@@ -35,17 +35,30 @@ class DataBasePipeline:
         self.session.close()
 
     def process_item(self, item:DouBanMovieComment, spider):
-        new = DBMovieModel(
-            name=item.name,
-            score=item.score,
-            summary=item.summary,
-            score_update_time=item.score_update_time
-        )
-        spider.logger.info(f">>>>>>{item.summary}")
-        try:
+        if not self.is_exist(item,spider):
+            new = DBMovieModel(
+                name=item.name,
+                score=item.score,
+                summary=item.summary,
+                score_update_time=item.score_update_time
+            )
             self.session.add(new)
+        # spider.logger.info(f">>>>>>{item.summary}")
+        try:
             self.session.commit()
         except:
             self.session.rollback()
             raise
         return item
+
+    def is_exist(self,item:DouBanMovieComment,spider):
+        record:DBMovieModel = self.session.query(DBMovieModel).filter(DBMovieModel.name==item.name).first()
+        spider.logger.info(f">>>>>>{record}")
+        if record:
+            record.name =item.name
+            record.summary = item.summary
+            record.score = item.score
+            record.score_update_time = item.score_update_time
+            self.session.commit()
+            return True
+        return False
