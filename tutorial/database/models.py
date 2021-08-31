@@ -77,3 +77,14 @@ class DouBanMovieComment(DeclarativeBase):
     score = sa.Column(sa.FLOAT,nullable=True)
     summary =sa.Column(sa.String(64),nullable=True)
     score_update_time = sa.Column(sa.DateTime,default=datetime.datetime.now)
+
+
+class GentleManResource(DeclarativeBase):
+    __tablename__="gentlemanresource"
+    # series ID + ID
+    flags = sa.Column(sa.String(64),nullable=False,index=True,unique=True)
+    title = sa.Column(sa.String(64),nullable=True)
+    url = sa.Column(sa.String(64),nullable=True)
+    series_type = sa.Column(sa.String(64),nullable=True)
+    src_url = sa.Column(sa.String(64),nullable=True)
+
