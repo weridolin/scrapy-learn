@@ -1,3 +1,11 @@
+'''
+Descripttion: 
+version: 
+Author: lhj
+Date: 2021-08-20 21:09:20
+LastEditors: lhj
+LastEditTime: 2021-09-02 01:10:47
+'''
 # Scrapy settings for tutorial project
 #
 # For simplicity, this file contains only settings considered important or
@@ -94,3 +102,6 @@ import os
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "covid.sqlite")
 DB_URI = f"sqlite:///{DB_PATH}"
+
+# 下载图片保存的地址
+IMAGES_STORE = '/resources/gentleman'

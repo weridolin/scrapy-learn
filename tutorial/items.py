@@ -1,9 +1,20 @@
+'''
+Descripttion: 
+version: 
+Author: lhj
+Date: 2021-08-20 21:09:20
+LastEditors: lhj
+LastEditTime: 2021-09-02 01:25:31
+'''
 # Define here the database for your scraped items
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
+from enum import Flag
+from time import time
 import scrapy
+
 
 
 class TutorialItem(scrapy.Item):
@@ -78,3 +89,24 @@ class DouBanMovieComment():
 
     def __str__(self):
         return json.dumps(self.__dict__,ensure_ascii=False,cls=DirectiveJsonEncoder)
+
+import time
+
+@dataclasses.dataclass 
+class GentleManResourceItem():
+    flag:str =None
+    title : Optional[str] =dataclasses.field(default="undefined")
+    url : Optional[str] =dataclasses.field(default="http://www.baidu.com")
+    series_id:Optional[str] =dataclasses.field(default=None)
+    series_type :Optional[str] =dataclasses.field(default="unknown")
+    src_url :Optional[str] =dataclasses.field(default="http://www.baidu.com")
+    local_uri :Optional[str] =dataclasses.field(default="resource/")
+
+    def __post__init__(self):
+        """exec after init"""
+        if self.series_id is None:
+            self.series_id = str(time.time())
+
+        if self.flag is None:
+            self.flag = str(self.series_id)+str(time.time())
+

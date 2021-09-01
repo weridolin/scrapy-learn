@@ -86,5 +86,7 @@ class GentleManResource(DeclarativeBase):
     title = sa.Column(sa.String(64),nullable=True)
     url = sa.Column(sa.String(64),nullable=True)
     series_type = sa.Column(sa.String(64),nullable=True)
+    series_id = sa.Column(sa.String(64),nullable=True)
     src_url = sa.Column(sa.String(64),nullable=True)
+
 
