@@ -4,7 +4,7 @@ version:
 Author: lhj
 Date: 2021-08-20 21:09:20
 LastEditors: lhj
-LastEditTime: 2021-09-02 01:25:31
+LastEditTime: 2021-09-02 21:48:59
 '''
 # Define here the database for your scraped items
 #
@@ -12,6 +12,7 @@ LastEditTime: 2021-09-02 01:25:31
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 from enum import Flag
+from re import S
 from time import time
 import scrapy
 
@@ -110,3 +111,14 @@ class GentleManResourceItem():
         if self.flag is None:
             self.flag = str(self.series_id)+str(time.time())
 
+    def to_dict(self):
+        return {
+            "flag":self.flag,
+            "title":self.title,
+            "url":self.url,
+            "series_id":self.series_id,
+            "series_type":self.series_type,
+            "src_url":self.src_url,
+            "local_uri":self.local_uri,
+        }
+    

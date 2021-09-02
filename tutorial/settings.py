@@ -4,7 +4,7 @@ version:
 Author: lhj
 Date: 2021-08-20 21:09:20
 LastEditors: lhj
-LastEditTime: 2021-09-02 01:10:47
+LastEditTime: 2021-09-02 23:20:44
 '''
 # Scrapy settings for tutorial project
 #
@@ -104,4 +104,4 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "covid.sqlite")
 DB_URI = f"sqlite:///{DB_PATH}"
 
 # 下载图片保存的地址
-IMAGES_STORE = '/resources/gentleman'
+IMAGES_STORE = os.path.join(os.path.dirname(__file__),'resources','gentleman')

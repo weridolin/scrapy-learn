@@ -1,3 +1,13 @@
+'''
+Description: 
+email: 359066432@qq.com
+Author: lhj
+software: vscode
+Date: 2021-08-28 18:48:25
+platform: windows 10
+LastEditors: lhj
+LastEditTime: 2021-09-02 21:49:39
+'''
 # -*- encoding: utf-8 -*-
 """
 @File           : models.py
@@ -79,14 +89,14 @@ class DouBanMovieComment(DeclarativeBase):
     score_update_time = sa.Column(sa.DateTime,default=datetime.datetime.now)
 
 
-class GentleManResource(DeclarativeBase):
+class GentleManResourceModel(DeclarativeBase):
     __tablename__="gentlemanresource"
     # series ID + ID
-    flags = sa.Column(sa.String(64),nullable=False,index=True,unique=True)
+    flag = sa.Column(sa.String(64),nullable=False,index=True,unique=True)
     title = sa.Column(sa.String(64),nullable=True)
     url = sa.Column(sa.String(64),nullable=True)
     series_type = sa.Column(sa.String(64),nullable=True)
     series_id = sa.Column(sa.String(64),nullable=True)
     src_url = sa.Column(sa.String(64),nullable=True)
-
+    local_uri = sa.Column(sa.String(64),nullable=True)
 

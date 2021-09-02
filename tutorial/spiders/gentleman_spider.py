@@ -4,7 +4,7 @@ version:
 Author: lhj
 Date: 2021-08-31 07:37:53
 LastEditors: lhj
-LastEditTime: 2021-09-02 01:38:22
+LastEditTime: 2021-09-03 00:15:59
 '''
 
 import re
@@ -23,8 +23,10 @@ class GentleManSpider(scrapy.Spider):
 
     custom_settings = {
         'ITEM_PIPELINES': {
-            'tutorial.pipelines.GentleManDownPipeline': 200
-        }
+            'tutorial.pipelines.GentleManDownPipeline': 200,
+            'tutorial.pipelines.GentlemanDataBasePipline': 300
+        },
+        'MEDIA_ALLOW_REDIRECTS' : True
     }
 
     def start_requests(self):
@@ -66,7 +68,7 @@ class GentleManSpider(scrapy.Spider):
 
     def detail_parse(self, response, **kwargs):
         """解析每套作品的每一张图，返回ITEM
-           request_header refere - https://www.mzitu.com/
+        request_header refere - https://www.mzitu.com/
         """
         src_url = response.css(".blur").attrib["src"]
         # 每个系列对应的顺序，比如 XX-X XX第X张 [0-9]*$
@@ -85,7 +87,7 @@ class GentleManSpider(scrapy.Spider):
             src_url=src_url,
             flag = flag
         )
-        self.logger.info(f"get pic--> series:{kwargs.get('series')},src url:{src_url}")
+        # self.logger.info(f"get pic--> series:{kwargs.get('series')},src url:{src_url}")
         yield item            
         try:
             detail_next_url = response.xpath("//a/span[text()='下一页»']/parent::*").attrib["href"]
