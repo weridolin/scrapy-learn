@@ -4,7 +4,7 @@ version:
 Author: lhj
 Date: 2021-08-20 21:09:20
 LastEditors: lhj
-LastEditTime: 2021-09-02 01:39:21
+LastEditTime: 2021-09-02 15:14:13
 '''
 # Define your item pipelines here
 #
@@ -84,20 +84,21 @@ class DataBasePipeline:
 class GentleManDownPipeline(ImagesPipeline):
 
     def file_path(self, request, response, info, *, item:GentleManResourceItem):
+        self.spiderinfo.spider.logger.info(f">>>>>>dasdasdad{os.path.join(item.series_id,item.flag,'.jpg')}")
         return os.path.join(item.series_id,item.flag,".jpg")
 
-    def get_media_requests(self, item, info):
-        if item["src_url"]:
-            self.spiderinfo.logger.info(f"begin down item >>>>{item}")
-            yield scrapy.Request(url=item["src_url"])
+    def get_media_requests(self, item:GentleManResourceItem, info):
+        if item.src_url:
+            self.spiderinfo.spider.logger.info(f"begin down item >>>>{item}")
+            yield scrapy.Request(url=item.src_url)
 
-    def item_completed(self, results, item, info):
+    def item_completed(self, results, item:GentleManResourceItem, info):
         image_paths = [x['path'] for ok, x in results if ok]
         if not image_paths:
             # raise DropItem("Item contains no images")
-            self.spiderinfo.logger.error(f"GentleManDownPipeline drop item>>>{item}")
+            self.spiderinfo.spider.logger.error(f"GentleManDownPipeline drop item>>>{item}")
             return item
         adapter = ItemAdapter(item)
-        adapter['local_uri'] = image_paths
-        self.spiderinfo.logger.info(f"down item complete>>>>{item}")
+        adapter.local_uri = image_paths
+        self.spiderinfo.spider.logger.info(f"down item complete>>>>{item}")
         return item
