@@ -4,7 +4,7 @@ version:
 Author: lhj
 Date: 2021-08-31 07:37:53
 LastEditors: lhj
-LastEditTime: 2021-09-03 00:15:59
+LastEditTime: 2021-09-03 00:47:25
 '''
 
 import re
@@ -56,15 +56,15 @@ class GentleManSpider(scrapy.Spider):
                     "series_type":kwargs.get("series_type","UNKNOWN")}
             )
 
-        # series_next_page = response.css(".next").attrib['href']
-        # try:
-        #     if series_next_page:
-        #         yield scrapy.Request(
-        #             url=series_next_page,
-        #             callback=self.series_parse)
-        #         self.logger.info(f"get series next page:{series_next_page}")
-        # except KeyError:
-        #     self.logger.info("no more series")
+        series_next_page = response.css(".next").attrib['href']
+        try:
+            if series_next_page:
+                yield scrapy.Request(
+                    url=series_next_page,
+                    callback=self.series_parse)
+                self.logger.info(f"get series next page:{series_next_page}")
+        except KeyError:
+            self.logger.info("no more series")
 
     def detail_parse(self, response, **kwargs):
         """解析每套作品的每一张图，返回ITEM
