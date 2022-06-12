@@ -100,3 +100,14 @@ class GentleManResourceModel(DeclarativeBase):
     src_url = sa.Column(sa.String(64),nullable=True)
     local_uri = sa.Column(sa.String(64),nullable=True)
 
+
+
+class GentleManMoveModel(DeclarativeBase):
+    __tablename__="gentleman_movie"
+
+    series = sa.Column(sa.String(64),nullable=False,index=True)
+    title = sa.Column(sa.String(128),nullable=False)
+    local_uri = sa.Column(sa.String(256),nullable=True)
+    m3u8_index_url = sa.Column(sa.String(256),nullable=True,index=True)
+    m3u8_ts_url_list = sa.Column(sa.JSON(),nullable=True)
+    movie_src_url = sa.Column(sa.String(256),nullable=True)

@@ -110,26 +110,34 @@ class GentleManDownPipeline(ImagesPipeline):
         return item
 
 
-class GentlemanDataBasePipline():
+class GentlemanDataBasePipeline():
     def __init__(self, db_uri):
         self.db_uri = db_uri
         self.engine = create_engine(db_uri)
         self.Session = sessionmaker(bind=self.engine)
+        self.orm = None
+        self.item = None
+        self.db_unique_field=None
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(db_uri=crawler.settings.get("DB_URI"))
 
     def open_spider(self, spider):
+        self.orm = spider.db_model
+        self.item = spider.item
+        self.db_unique_field = spider.db_unique_field
         self.session = self.Session()
 
     def close_spider(self, spider):
         self.session.commit()
         self.session.close()
+        spider.driver.quit()
 
-    def process_item(self, item: GentleManResourceItem, spider):
-        if not self.is_exist(item, spider):
-            new = GentleManResourceModel(**item.to_dict())
+    def process_item(self, item, spider):
+        # spider.logger.info(f">>> process item ->{item.to_dict()}")
+        if not self.is_exist(item):
+            new = self.orm(**item.to_dict())
             self.session.add(new)
         try:
             self.session.commit()
@@ -138,18 +146,17 @@ class GentlemanDataBasePipline():
             raise
         return item
 
-    def is_exist(self, item: GentleManResourceItem, spider):
-        record: GentleManResourceModel = self.session.query(GentleManResourceModel).filter(
-            GentleManResourceModel.flag == item.flag).first()
+    def is_exist(self, item):
+        record = self.session.query(self.orm).filter(getattr(self.orm,self.db_unique_field) == getattr(item,self.db_unique_field)).first()
         # spider.logger.info(f">>>>>>{record}")
         if record:
-            record.url = item.url
-            record.flag = item.flag
-            record.local_uri = item.local_uri
-            record.series_id = item.series_id
-            record.series_type = item.series_type
-            record.title = item.title
-            record.src_url = item.src_url
+            for k,v in item.to_dict().items():
+                if hasattr(record,k):
+                    setattr(record,k,v)
             self.session.commit()
             return True
         return False
+
+from scrapy.pipelines.files import FilesPipeline
+class GentleManMoveDownPipeline(FilesPipeline):
+    ...

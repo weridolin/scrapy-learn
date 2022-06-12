@@ -71,10 +71,11 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'tutorial.pipelines.DataBasePipeline': 300,
-}
+# ITEM_PIPELINES = {
+#    'tutorial.pipelines.DataBasePipeline': 300,
+# }
 
+# LOG_LEVEL = "INFO"
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
@@ -95,7 +96,7 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
+HTTPERROR_ALLOWED_CODES = [301,302]
 
 ## 数据库
 import os

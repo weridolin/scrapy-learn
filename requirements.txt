@@ -1,4 +1,4 @@
-alembic==1.6.5
+alembic
 attrs==21.2.0
 Automat==20.2.0
 cffi==1.14.6

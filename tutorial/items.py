@@ -122,3 +122,27 @@ class GentleManResourceItem():
             "local_uri":self.local_uri,
         }
     
+@dataclasses.dataclass 
+class GentleManMovieItem():
+    # flag:str =None
+    title : Optional[str] =dataclasses.field(default="undefined")
+    series : Optional[str] =dataclasses.field(default="md")
+    movie_src_url:Optional[str]= dataclasses.field(default="www.baidu.com")
+    m3u8_index_url :Optional[str] =dataclasses.field(default="unknown")
+    m3u8_ts_url_list :Optional[str] =dataclasses.field(default=None)
+    local_uri :Optional[str] =dataclasses.field(default="gentleManMov/")
+
+    def __post__init__(self):
+        """exec after init"""
+
+
+    def to_dict(self):
+        return {
+            "title":self.title,
+            "series":self.series,
+            "m3u8_index_url":self.m3u8_index_url,
+            "m3u8_ts_url_list":self.m3u8_ts_url_list,
+            "local_uri":self.local_uri,
+            "movie_src_url":self.movie_src_url
+        }
+    

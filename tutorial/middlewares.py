@@ -1,3 +1,4 @@
+
 # Define here the database for your spider middleware
 #
 # See documentation in:
@@ -56,10 +57,10 @@ class TutorialSpiderMiddleware:
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class TutorialDownloaderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the downloader middleware does not modify the
-    # passed objects.
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+class SeleniumMiddleware:
+    ## 
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -78,6 +79,7 @@ class TutorialDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+
         return None
 
     def process_response(self, request, response, spider):
@@ -87,9 +89,11 @@ class TutorialDownloaderMiddleware:
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+
         return response
 
     def process_exception(self, request, exception, spider):
+        # print()
         # Called when a download handler or a process_request()
         # (from other downloader middleware) raises an exception.
 
@@ -97,7 +101,14 @@ class TutorialDownloaderMiddleware:
         # - return None: continue processing this exception
         # - return a Response object: stops process_exception() chain
         # - return a Request object: stops process_exception() chain
-        pass
+        pass 
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        spider.logger.info('gentile man move spider opened: %s' % spider.name)
+        self.orm = spider.db_model
+        self.item = spider.item
+        self.db_unique_field = spider.db_unique_field
+        self.session = self.Session()
+
+    def is_exist(self, item):
+        ...
