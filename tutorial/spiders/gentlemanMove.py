@@ -110,8 +110,22 @@ class MADOULAMovSpider(scrapy.Spider):
                         headers=self.headers
                     )
                 else:
-                    gen = self.get_move_detail_by_selenium(url = movie_src_url,item=item)                
-                    gen.send(None)
+                    self.driver.get(movie_src_url)
+                    _ = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="video"]/div'))) 
+                    e = self.driver.find_element(By.XPATH,'//*[@id="playleft"]/iframe')
+                    play_url = e.get_attribute("src")
+                    self.logger.info(f">>> get m3u8 src url by selenium:{play_url}")
+                    m3u8_index_url = play_url.split("=")[1]
+                    item.m3u8_index_url = m3u8_index_url
+                    yield scrapy.Request(
+                        url=m3u8_index_url,
+                        headers=self.headers,
+                        callback=self.get_move_ts_url_list_from_index,
+                        cb_kwargs={"item":item,"url":m3u8_index_url}
+                    )
+                    # SCRAPY只能返回 REQUEST/ITEM/NONE?
+                    # gen = self.get_move_detail_by_selenium(url = movie_src_url,item=item)                
+                    # gen.send(None)
             else:
                 self.logger.info(f"urc:{movie_src_url} is already exist!")
         try:
@@ -151,9 +165,9 @@ class MADOULAMovSpider(scrapy.Spider):
         _ = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="video"]/div'))) 
         e = self.driver.find_element(By.XPATH,'//*[@id="playleft"]/iframe')
         play_url = e.get_attribute("src")
+        self.logger.info(f">>> get m3u8 src url by selenium:{play_url}")
         m3u8_index_url = play_url.split("=")[1]
         item.m3u8_index_url = m3u8_index_url
-        self.logger.info(f">>> get m3u8 src url by selenium:{m3u8_index_url}")
         yield scrapy.Request(
             url=m3u8_index_url,
             headers=self.headers,
